@@ -11,5 +11,8 @@
     <string name="historico">Histórico</string>
     <string name="saldoBilhete">Saldo do Bilhete:</string>
     <string name="inserirSaldo">Inserir Saldo</string>
+    <string name="valor">Valor:</string>
+    <string name="alert_dialog_cancelar">Cancelar</string>
+    <string name="alert_dialog_confirmar">Confirmar</string>
 
 </resources>
