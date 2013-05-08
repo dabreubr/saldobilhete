@@ -1,10 +1,14 @@
 package br.com.saldobilhete;
 
+import br.com.database.DatabaseHandler;
+import br.com.entities.Transacao;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -17,19 +21,22 @@ public class MainActivity extends Activity {
 	
 	private static final int DIALOG_INSERIR_SALDO = 1;
 	private static final int DIALOG_OUTROS_VALORES = 2;
-	
 	private Float saldoBilhete;
-
+	private DatabaseHandler db;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        db = new DatabaseHandler(this);
         
         saldoBilhete = Float.valueOf(0);
         
         Button btnInserirSaldo = (Button) findViewById(R.id.btnInserirSaldo);
         Button btnCPTMMetro = (Button) findViewById(R.id.btnCPTMMetro);
         Button btnOutrosValores = (Button) findViewById(R.id.btnOutrosValores);
+        Button btnHistorico = (Button) findViewById(R.id.btnHistorico);
        
         btnInserirSaldo.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -48,6 +55,12 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
             	Dialog outrosValores = showTextEntryDialog(DIALOG_OUTROS_VALORES);
             	outrosValores.show();
+            }
+        });
+        
+        btnHistorico.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	Log.e("App", db.getAllTransactions().toString());
             }
         });
     }
@@ -115,9 +128,16 @@ public class MainActivity extends Activity {
 	private void cptmMetro() {
 		Float valorCPTMMetro = Float.valueOf(3);
 		
+		Transacao transacao = new Transacao();
+		transacao.setData("20130508");
+		transacao.setTipo(1);
+		transacao.setValor(valorCPTMMetro);
+		
+		db.addTransacao(transacao);
+		
 		saldoBilhete = saldoBilhete - valorCPTMMetro;
 		atualizaTela();
 		
 	}
-    
+   
 }
