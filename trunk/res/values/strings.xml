@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Saldo Bilhete</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="inserirCartao">Inserir Cartão</string>
+    <string name="cptmMetro">CPTM/Metro</string>
+    <string name="outrosValores">Outros Valores</string>
+    <string name="operacoes">Operações</string>
+    <string name="historico">Histórico</string>
+    <string name="saldoBilhete">Saldo do Bilhete:</string>
+    <string name="inserirSaldo">Inserir Saldo</string>
+
+</resources>
