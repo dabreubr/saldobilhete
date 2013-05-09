@@ -6,6 +6,8 @@ public class Transacao {
 	private String data;
 	private float valor;
 	private int tipo;
+	private String debitoCredito;
+	private Cartao cartao;
 	
 	public Transacao() {
 		super();
@@ -39,7 +41,24 @@ public class Transacao {
 	@Override
 	public String toString() {
 		return "Transacao [id=" + id + ", data=" + data + ", valor=" + valor
-				+ ", tipo=" + tipo + "]";
+				+ ", tipo=" + tipo + ", debitoCredito=" + debitoCredito 
+				+ ", cartao=" + cartao.getId() + "]";
+	}
+
+	public String getDebitoCredito() {
+		return debitoCredito;
+	}
+
+	public void setDebitoCredito(String debitoCredito) {
+		this.debitoCredito = debitoCredito;
+	}
+
+	public Cartao getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
 	}
 
 }

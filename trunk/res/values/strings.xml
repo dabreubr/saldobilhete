@@ -2,17 +2,16 @@
 <resources>
 
     <string name="app_name">Saldo Bilhete</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Config</string>
     <string name="inserirCartao">Inserir Cartão</string>
     <string name="cptmMetro">CPTM/Metro</string>
     <string name="outrosValores">Outros Valores</string>
-    <string name="operacoes">Operações</string>
     <string name="historico">Histórico</string>
     <string name="saldoBilhete">Saldo do Bilhete:</string>
     <string name="inserirSaldo">Inserir Saldo</string>
     <string name="valor">Valor:</string>
     <string name="alert_dialog_cancelar">Cancelar</string>
     <string name="alert_dialog_confirmar">Confirmar</string>
+    <string name="limparDados">Limpar Dados</string>
 
 </resources>
