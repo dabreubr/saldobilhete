@@ -64,6 +64,7 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/txtSaldoBilhete"
         android:gravity="right"
+        android:text="@string/sem_texto"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
