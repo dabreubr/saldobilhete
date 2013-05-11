@@ -7,6 +7,7 @@ import java.util.Map;
 
 import br.com.adapters.ExpandableListAdapter;
 import br.com.database.DatabaseHandler;
+import br.com.entities.Transacao;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -20,8 +21,8 @@ public class HistoricoListActivity extends Activity {
 
 	private DatabaseHandler db;
 	List<String> groupList;
-    List<String> childList;
-    Map<String, List<String>> operacoesCollection;
+    List<Transacao> childList;
+    Map<String, List<Transacao>> operacoesCollection;
     ExpandableListView expListView;
     
 	@Override
@@ -57,36 +58,26 @@ public class HistoricoListActivity extends Activity {
     }
  
     private void createGroupList() {
-        groupList = new ArrayList<String>();
-        groupList.add("2013-05-09");
-        groupList.add("2013-05-10");
+        groupList = db.getAllDateTransactions();
     }
  
     private void createCollection() {
-        operacoesCollection = new LinkedHashMap<String, List<String>>();
+        operacoesCollection = new LinkedHashMap<String, List<Transacao>>();
+        
+        for (String date : groupList) {
+			ArrayList<Transacao> chields = new ArrayList<Transacao>();
+            for (Transacao transacao : db.getTransactionsByDate(date))
+            	chields.add(transacao);
+			loadChild(chields);
  
-        for (String data : groupList) {
-            if (data.equals("2013-05-09")) { 
-                ArrayList<String> chields = new ArrayList<String>();
-                chields.add("Crédito R$ 100,00");
-                chields.add("Débito CPTM/Metro R$ 3,00"); 
-                chields.add("Débito CPTM/Metro R$ 3,00");
-            	loadChild(chields);
-            }
-            else if (data.equals("2013-05-10")) {
-                ArrayList<String> chields = new ArrayList<String>(); 
-                chields.add("Débito CPTM/Metro R$ 3,00");
-                loadChild(chields);
-            }
- 
-            operacoesCollection.put(data, childList);
+            operacoesCollection.put(date, childList);
         }
     }
  
-    private void loadChild(ArrayList<String> operacoes) {
-        childList = new ArrayList<String>();
-        for (String model : operacoes)
-            childList.add(model);
+    private void loadChild(ArrayList<Transacao> operacoes) {
+        childList = new ArrayList<Transacao>();
+        for (Transacao operacao : operacoes)
+            childList.add(operacao);
     }
  
     private void setGroupIndicatorToRight() {

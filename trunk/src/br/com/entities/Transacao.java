@@ -60,5 +60,32 @@ public class Transacao {
 	public void setCartao(Cartao cartao) {
 		this.cartao = cartao;
 	}
+	
+	public String getTipoString() {
+		String result = "";
+		if (tipo == 1)
+			result = "";
+		else if (tipo == 2)
+			result = "CPTM/Metro";
+		else if (tipo == 3)
+			result = "Outros";
+		return result;
+	}
+	
+	public String getDebitoCreditoString() {
+		String result = "";
+		if (debitoCredito.equals("C")) 
+			result = "Crédito";
+		else
+			result = "Débito";
+		return result;
+	}
+	
+	public String toListString() {
+		String result = "";
+		result = getDebitoCreditoString() + " " + getTipoString() + " " + valor;
+		return result;
+	}
+	
 
 }

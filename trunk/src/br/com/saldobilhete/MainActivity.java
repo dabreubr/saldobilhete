@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         db = new DatabaseHandler(this);
-        cartao = db.getCartao(1);
         
         Button btnInserirSaldo = (Button) findViewById(R.id.btnInserirSaldo);
         Button btnCPTMMetro = (Button) findViewById(R.id.btnCPTMMetro);
@@ -51,7 +50,8 @@ public class MainActivity extends Activity {
         
         btnCPTMMetro.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-            	cptmMetro();
+            	Float valorCPTMMetro = Float.valueOf(3);
+            	debitaValor(valorCPTMMetro, 2);
             }
         });
         
@@ -68,8 +68,11 @@ public class MainActivity extends Activity {
             	startActivity(it);
             }
         });
-        
-        atualizaTela();
+    }
+    
+    protected void onStart() {
+    	super.onStart();
+    	atualizaTela();
     }
 
 
@@ -111,7 +114,9 @@ public class MainActivity extends Activity {
 	            .setPositiveButton(R.string.alert_dialog_confirmar, new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int whichButton) {
 	                	EditText edtValor = (EditText) textEntryView.findViewById(R.id.edtValor);
-	                	inserirSaldo(Float.valueOf(edtValor.getText().toString()));
+	                	if (edtValor.getText().length()>0) {
+	                		inserirSaldo(Float.valueOf(edtValor.getText().toString()));
+	                	}
 	                }
 	            })
 	            .setNegativeButton(R.string.alert_dialog_cancelar, new DialogInterface.OnClickListener() {
@@ -129,8 +134,11 @@ public class MainActivity extends Activity {
 	            .setPositiveButton(R.string.alert_dialog_confirmar, new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int whichButton) {
 	                	EditText edtValor = (EditText) textEntryView.findViewById(R.id.edtValor);
-	                	cartao.setSaldo(cartao.getSaldo() - Float.valueOf(edtValor.getText().toString()));
-	                	atualizaTela();
+	                	if (edtValor.getText().length()>0) {
+		                	Float valor = Float.valueOf(edtValor.getText().toString());
+		                	debitaValor(valor, 3);
+		                	atualizaTela();
+	                	}
 	                }
 	            })
 	            .setNegativeButton(R.string.alert_dialog_cancelar, new DialogInterface.OnClickListener() {
@@ -145,26 +153,26 @@ public class MainActivity extends Activity {
     }
     
     private void atualizaTela() {
+        cartao = db.getCartao(1);
         TextView txtValorSaldoBilhete = (TextView) findViewById(R.id.txtValorSaldoBilhete);
         txtValorSaldoBilhete.setText(cartao.getSaldo().toString());
     }
     
 	@SuppressLint("SimpleDateFormat") 
-	private void cptmMetro() {
-		Float valorCPTMMetro = Float.valueOf(3);
+	private void debitaValor(Float valor, Integer tipo) {
 		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 		String formattedDate = df.format(Calendar.getInstance().getTime());
 		
 		Transacao transacao = new Transacao();
 		transacao.setData(formattedDate);
-		transacao.setTipo(2);
-		transacao.setValor(valorCPTMMetro);
+		transacao.setTipo(tipo);
+		transacao.setValor(valor);
 		transacao.setCartao(cartao);
 		transacao.setDebitoCredito("D");
 		
 		db.addTransacao(transacao);
 		
-		cartao.setSaldo(cartao.getSaldo() - valorCPTMMetro);
+		cartao.setSaldo(cartao.getSaldo() - valor);
 		db.updateSaldo(cartao);
 		atualizaTela();
 		

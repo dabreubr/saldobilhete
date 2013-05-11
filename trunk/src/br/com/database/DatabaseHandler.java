@@ -104,7 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String selectQuery = "SELECT " + KEY_ID + ", " + TRANS_DATA + ", " + TRANS_TIPO + ", " + 
         TRANS_VALOR + ", " + TRANS_DEBITO_CREDITO + ", " + TRANS_CARTAO + " FROM " + TABLE_TRANSACTIONS;
  
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
  
         // looping through all rows and adding to list
@@ -147,5 +147,62 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     	db.delete(TABLE_CARTOES, null, null);
     	db.delete(TABLE_TRANSACTIONS, null, null);
     	onOpen(db);
+    }
+    
+    public List<String> getAllDateTransactions() {
+        List<String> dateList = new ArrayList<String>();
+        // Select All Query
+        String selectQuery = "SELECT DISTINCT " + TRANS_DATA + " FROM " + TABLE_TRANSACTIONS + 
+        		" ORDER BY " + TRANS_DATA + " DESC";
+ 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+ 
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+            	String date = cursor.getString(0);
+            	dateList.add(date);
+            } while (cursor.moveToNext());
+        }
+ 
+        // return list
+        return dateList;
+    }
+    
+    public List<Transacao> getTransactionsByDate(String date) {
+        List<Transacao> transactionsList = new ArrayList<Transacao>();
+ 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_TRANSACTIONS, new String[] {KEY_ID, TRANS_DATA, TRANS_TIPO, TRANS_VALOR,
+        		TRANS_DEBITO_CREDITO, TRANS_CARTAO}, TRANS_DATA+"=?", new String[]{date},null,null,null);
+ 
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+            	Transacao transacao = new Transacao();
+            	transacao.setId(Integer.parseInt(cursor.getString(0)));
+            	transacao.setData(cursor.getString(1));
+            	transacao.setTipo(cursor.getInt(2));
+            	transacao.setValor(cursor.getFloat(3));
+            	transacao.setDebitoCredito(cursor.getString(4));
+            	transacao.setCartao(getCartao(cursor.getInt(5)));
+                // Adding to list
+            	transactionsList.add(transacao);
+            } while (cursor.moveToNext());
+        }
+ 
+        // return list
+        return transactionsList;
+    }
+    
+    public int deleteTransaction(Transacao transacao) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	if (transacao.getDebitoCredito().equals("D"))
+    		transacao.getCartao().setSaldo(transacao.getCartao().getSaldo() + transacao.getValor());
+    	else
+    		transacao.getCartao().setSaldo(transacao.getCartao().getSaldo() - transacao.getValor());
+    	updateSaldo(transacao.getCartao());
+    	return db.delete(TABLE_TRANSACTIONS, KEY_ID+"=?", new String[]{String.valueOf(transacao.getId())});
     }
 }
