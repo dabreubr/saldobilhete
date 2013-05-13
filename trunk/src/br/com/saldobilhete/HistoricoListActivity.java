@@ -40,7 +40,8 @@ public class HistoricoListActivity extends Activity {
         final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(
                 this, groupList, operacoesCollection);
         expListView.setAdapter(expListAdapter);
- 
+        for(int i=0; i<expListAdapter.getGroupCount(); i++)
+        	expListView.expandGroup(i);
         setGroupIndicatorToRight();
  
         expListView.setOnChildClickListener(new OnChildClickListener() {
@@ -49,7 +50,7 @@ public class HistoricoListActivity extends Activity {
                     int groupPosition, int childPosition, long id) {
                 final Transacao selected = (Transacao) expListAdapter.getChild(
                         groupPosition, childPosition);
-                Toast.makeText(getBaseContext(), selected.toListString(), Toast.LENGTH_LONG)
+                Toast.makeText(getBaseContext(), selected.toListString(), Toast.LENGTH_SHORT)
                         .show();
  
                 return true;

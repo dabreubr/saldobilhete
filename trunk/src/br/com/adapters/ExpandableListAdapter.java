@@ -5,7 +5,6 @@ import java.util.Map;
 
 import br.com.database.DatabaseHandler;
 import br.com.entities.Transacao;
-import br.com.saldobilhete.HistoricoListActivity;
 import br.com.saldobilhete.R;
  
 import android.app.Activity;
