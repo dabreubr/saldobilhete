@@ -197,12 +197,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     
     public int deleteTransaction(Transacao transacao) {
+    	Cartao cartao = getCartao(transacao.getCartao().getId());
     	SQLiteDatabase db = this.getWritableDatabase();
     	if (transacao.getDebitoCredito().equals("D"))
-    		transacao.getCartao().setSaldo(transacao.getCartao().getSaldo() + transacao.getValor());
+    		cartao.setSaldo(cartao.getSaldo() + transacao.getValor());
     	else
-    		transacao.getCartao().setSaldo(transacao.getCartao().getSaldo() - transacao.getValor());
-    	updateSaldo(transacao.getCartao());
+    		cartao.setSaldo(cartao.getSaldo() - transacao.getValor());
+    	updateSaldo(cartao);
     	return db.delete(TABLE_TRANSACTIONS, KEY_ID+"=?", new String[]{String.valueOf(transacao.getId())});
     }
 }
