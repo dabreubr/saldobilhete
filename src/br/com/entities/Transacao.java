@@ -64,7 +64,7 @@ public class Transacao {
 	public String getTipoString() {
 		String result = "";
 		if (tipo == 1)
-			result = "";
+			result = "Recarga";
 		else if (tipo == 2)
 			result = "CPTM/Metro";
 		else if (tipo == 3)

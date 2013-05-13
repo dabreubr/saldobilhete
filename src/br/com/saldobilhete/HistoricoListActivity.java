@@ -47,9 +47,9 @@ public class HistoricoListActivity extends Activity {
  
             public boolean onChildClick(ExpandableListView parent, View v,
                     int groupPosition, int childPosition, long id) {
-                final String selected = (String) expListAdapter.getChild(
+                final Transacao selected = (Transacao) expListAdapter.getChild(
                         groupPosition, childPosition);
-                Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG)
+                Toast.makeText(getBaseContext(), selected.toListString(), Toast.LENGTH_LONG)
                         .show();
  
                 return true;
