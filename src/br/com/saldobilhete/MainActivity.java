@@ -18,9 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -104,7 +107,11 @@ public class MainActivity extends Activity {
     protected Dialog showTextEntryDialog(int dialog) {
         LayoutInflater factory = LayoutInflater.from(this);
         final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
-
+        final Spinner combo = (Spinner) textEntryView.findViewById(R.id.comboTipo);
+        String[] tipos = new String[]{"CPTM/Metro", "Onibus", "Outros"}; 
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tipos);
+        adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        combo.setAdapter(adaptador);
         switch (dialog) {
     	case DIALOG_INSERIR_SALDO:
 	        return new AlertDialog.Builder(this)
@@ -160,22 +167,26 @@ public class MainActivity extends Activity {
     
 	@SuppressLint("SimpleDateFormat") 
 	private void debitaValor(Float valor, Integer tipo) {
-		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-		String formattedDate = df.format(Calendar.getInstance().getTime());
-		
-		Transacao transacao = new Transacao();
-		transacao.setData(formattedDate);
-		transacao.setTipo(tipo);
-		transacao.setValor(valor);
-		transacao.setCartao(cartao);
-		transacao.setDebitoCredito("D");
-		
-		db.addTransacao(transacao);
-		
-		cartao.setSaldo(cartao.getSaldo() - valor);
-		db.updateSaldo(cartao);
-		atualizaTela();
-		
+		if (cartao.getSaldo() - valor >= 0) {  
+			SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+			String formattedDate = df.format(Calendar.getInstance().getTime());
+			
+			Transacao transacao = new Transacao();
+			transacao.setData(formattedDate);
+			transacao.setTipo(tipo);
+			transacao.setValor(valor);
+			transacao.setCartao(cartao);
+			transacao.setDebitoCredito("D");
+			
+			db.addTransacao(transacao);
+			
+			cartao.setSaldo(cartao.getSaldo() - valor);
+			db.updateSaldo(cartao);
+			atualizaTela();
+		} else {
+			Toast toast = Toast.makeText(this, "Saldo insuficiente", Toast.LENGTH_SHORT);
+			toast.show();
+		}
 	}
 	
 	@SuppressLint("SimpleDateFormat") 

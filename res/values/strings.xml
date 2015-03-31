@@ -14,5 +14,6 @@
     <string name="alert_dialog_confirmar">Confirmar</string>
     <string name="limparDados">Limpar Dados</string>
     <string name="sem_texto"></string>
+    <string name="tipo">Tipo:</string>
 
 </resources>
